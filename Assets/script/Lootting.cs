@@ -5,28 +5,28 @@ using UnityEngine;
 public class Lootting : MonoBehaviour
 {
     Rigidbody RB;
-    public int speed = 5;
+    public int speed = 40;
     void Start()
     {
         RB = GetComponent<Rigidbody>();
     }
-    void FixedUpdate()
+    void Update()
     {
         Vector3 Dir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         RB.MovePosition(transform.position + Dir.normalized * Time.deltaTime * speed);
-
-        Debug.Log(speed);
     }
 
-    void OnTriggerStay(Collider other)
+  void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Chest"))
+        if (other.gameObject.CompareTag("Chest")&& Input.GetKeyDown(KeyCode.A))
         {
-            if (Input.GetKey(KeyCode.A))
-            {
-                Destroy(other.gameObject);
-                
-            }
+            speed = 0;
+            StartCoroutine(cameraduration());
+        }
+        IEnumerator cameraduration()
+        {
+            yield return new WaitForSeconds(2);
+            speed = 40;
         }
     }
 }
