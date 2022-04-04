@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Action : MonoBehaviour
+public class Action1 : MonoBehaviour
 {
     public int speed = 20;
     private CharacterController characontrol;
@@ -21,15 +21,16 @@ public class Action : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         print("coffre dispo");
-        if (other.gameObject.CompareTag("Chest")&& Input.GetKeyDown(KeyCode.A))
+        if (other.gameObject.CompareTag("Chest") && Input.GetKeyDown(KeyCode.A))
         {
+            print("creuse");
             speed = 0;
             StartCoroutine(cameraduration());
-        }       
+        }
     }
     IEnumerator cameraduration()
-        {
-            yield return new WaitForSeconds(2);
-            speed = 20;
-        }
+    {
+        yield return new WaitForSeconds(2);
+        speed = 20;
+    }
 }

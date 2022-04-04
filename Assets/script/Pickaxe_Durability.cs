@@ -8,6 +8,8 @@ public class Pickaxe_Durability : MonoBehaviour
     public int currentHealth;
     public int currentchest;
 
+    GameObject currentChest;
+    public bool chestTouched = false;
 
     //camera management
     public bool ZoomActive;
@@ -37,19 +39,55 @@ public class Pickaxe_Durability : MonoBehaviour
             Time.timeScale = 0;
             Debug.Log("Dead");
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+
+            if (chestTouched)
+            {
+                ZoomActive = true;
+                ChestLoot(1);
+                Destroy(currentChest);
+                chestTouched = false;
+            }
+            else
+            {
+                takedamage(1);
+            }
+
+        }
+        
+
     }
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Chest")&& Input.GetKeyDown(KeyCode.A))
+        currentChest = other.gameObject;
+        if (currentChest.CompareTag("Chest"))
         {
-            ZoomActive = true;
-            ChestLoot(1);
-            Destroy(other.gameObject);
+            chestTouched = true;
         }
-        if (!other.gameObject.CompareTag("Chest") && Input.GetKeyDown(KeyCode.A))
+        /*
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            takedamage(1);
+            
+           if (other.gameObject.CompareTag("Chest"))
+            {
+                ZoomActive = true;
+                ChestLoot(1);
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                takedamage(1);
+            }
+
         }
+        */
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        chestTouched = false;
     }
 
     void takedamage(int damage)
