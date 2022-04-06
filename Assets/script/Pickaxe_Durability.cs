@@ -16,14 +16,20 @@ public class Pickaxe_Durability : MonoBehaviour
     public float speed;
     public Camera Cam;
 
+
+    public AudioSource helpsound;
     //script management
     public Exploration_Progression EP;
     public Pickaxe_Setup_Slider healthbar;
+
+    public GameObject loose;
+    public GameObject Win;
 
     void Start()
     {
         //camera
         Cam = Camera.main;
+        loose.SetActive(false);
 
         currentHealth = maxHealth;
         currentchest = 0;
@@ -31,6 +37,9 @@ public class Pickaxe_Durability : MonoBehaviour
         //script setup
         healthbar.SetMaxHealth(maxHealth);
         EP.SetMaxChest(currentchest);
+
+        Win.SetActive(false);
+        helpsound = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -38,6 +47,7 @@ public class Pickaxe_Durability : MonoBehaviour
         {
             Time.timeScale = 0;
             Debug.Log("Dead");
+            loose.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
@@ -54,7 +64,10 @@ public class Pickaxe_Durability : MonoBehaviour
             {
                 takedamage(1);
             }
-
+        }
+        if(currentchest == 10)
+        {
+            Win.SetActive(true);
         }
         
 
@@ -114,9 +127,4 @@ public class Pickaxe_Durability : MonoBehaviour
         Cam.orthographicSize = Mathf.Lerp(Cam.orthographicSize, 10, speed);
         ZoomActive = false;
     }
-    /*void chestreward(int nodamage)
-      {
-          currentHealth += nodamage;
-          healthbar.Sethealth(currentHealth);
-      }*/
 }
