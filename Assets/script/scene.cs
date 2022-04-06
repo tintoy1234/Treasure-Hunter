@@ -10,6 +10,13 @@ public class scene : MonoBehaviour
     public GameObject button;
 
 
+    public Action1 ac;
+
+
+    public AudioSource musicstart;
+    public AudioSource ambiancemusic;
+
+
     public Camera Main;
     public Camera start;
     public Image imageNoir;
@@ -21,11 +28,19 @@ public class scene : MonoBehaviour
         imageNoir.enabled = false;
 
 
+        ambiancemusic.Stop();
+        musicstart.Play();
+
+
         imageNoir.GetComponent<Image>();
+        ac.enabled = false;
     }
 
     public void Play()
     {
+        musicstart.Stop();
+        ambiancemusic.Play();
+        ac.enabled = true;
         imageNoir.enabled = true;
         StartCoroutine(FadeImage(true));
     }

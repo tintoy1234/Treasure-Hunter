@@ -45,7 +45,7 @@ public class Pickaxe_Durability : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
             Debug.Log("Dead");
             loose.SetActive(true);
         }
