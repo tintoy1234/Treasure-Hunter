@@ -4,26 +4,32 @@ using UnityEngine;
 
 public class Pickaxe_Durability : MonoBehaviour
 {
+    //variable
     public int maxHealth = 5;
     public int currentHealth;
     public int currentchest;
-
     GameObject currentChest;
     public bool chestTouched = false;
+    bool Anim = false;
 
-    //camera management
+    //camera management pour retour visuel
     public bool ZoomActive;
     public float speed;
-    public Camera Cam;
+    public int speedchild;
+    Camera Cam;
 
+    //son enfant
+    AudioSource helpsound;
 
-    public AudioSource helpsound;
     //script management
     public Exploration_Progression EP;
     public Pickaxe_Setup_Slider healthbar;
 
     public GameObject loose;
     public GameObject Win;
+
+
+
 
     void Start()
     {
@@ -41,24 +47,50 @@ public class Pickaxe_Durability : MonoBehaviour
         Win.SetActive(false);
         helpsound = GetComponent<AudioSource>();
     }
+
+
+
+
     void Update()
     {
         if (currentHealth <= 0)
         {
-            //Time.timeScale = 0;
             Debug.Log("Dead");
             loose.SetActive(true);
         }
 
+        if (Anim)
+        {
+            currentChest.transform.Translate(Vector3.up * speedchild * Time.deltaTime);
+            if (currentChest.transform.position.y >= 1)
+            {
+                speedchild = 1;
+            }
+            if (currentChest.transform.position.y >= 2)
+            {
+                Anim = false;
+                Destroy(currentChest);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.A))
         {
 
             if (chestTouched)
             {
+                speedchild = 10;
                 ZoomActive = true;
                 ChestLoot(1);
-                Destroy(currentChest);
+                if (currentHealth == maxHealth)
+                {
+
+                }
+                else 
+                {
+                    takedamage(-1);
+                }
                 chestTouched = false;
+                Anim = true;
+                helpsound.Stop();
             }
             else
             {
@@ -69,9 +101,11 @@ public class Pickaxe_Durability : MonoBehaviour
         {
             Win.SetActive(true);
         }
-        
-
     }
+
+
+
+
     void OnTriggerEnter(Collider other)
     {
         currentChest = other.gameObject;
@@ -79,29 +113,14 @@ public class Pickaxe_Durability : MonoBehaviour
         {
             chestTouched = true;
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            
-           if (other.gameObject.CompareTag("Chest"))
-            {
-                ZoomActive = true;
-                ChestLoot(1);
-                Destroy(other.gameObject);
-            }
-            else
-            {
-                takedamage(1);
-            }
-
-        }
-        */
     }
-
     void OnTriggerExit(Collider other)
     {
         chestTouched = false;
     }
+
+
+
 
     void takedamage(int damage)
     {

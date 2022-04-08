@@ -5,18 +5,21 @@ using UnityEngine.UI;
 
 public class scene : MonoBehaviour
 {
+    //UI management
     public GameObject explo;
     public GameObject motivation;
     public GameObject button;
+    public bool go;
 
-
+    //perso speed control
     public Action1 ac;
+    public pausescript ps;
 
-
+    //music
     public AudioSource musicstart;
     public AudioSource ambiancemusic;
 
-
+    //cam et fade
     public Camera Main;
     public Camera start;
     public Image imageNoir;
@@ -25,28 +28,33 @@ public class scene : MonoBehaviour
     {
         motivation.SetActive(false);
         explo.SetActive(false);
-        imageNoir.enabled = false;
-
+        go = false;
 
         ambiancemusic.Stop();
         musicstart.Play();
 
-
+        imageNoir.enabled = false;
         imageNoir.GetComponent<Image>();
         ac.enabled = false;
+        ps.enabled = false;
     }
 
     public void Play()
     {
         musicstart.Stop();
-        ambiancemusic.Play();
+        go = true;
         ac.enabled = true;
+        ps.enabled = true;
         imageNoir.enabled = true;
         StartCoroutine(FadeImage(true));
     }
 
     public void Update()
     {
+        if (go)
+        {
+            ambiancemusic.Play();
+        }
         if (again)
         {
             motivation.SetActive(true);

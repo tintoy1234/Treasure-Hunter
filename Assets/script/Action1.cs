@@ -4,33 +4,49 @@ using UnityEngine;
 
 public class Action1 : MonoBehaviour
 {
-    public int speed = 20;
+    public float turnspeed = 0.5f;
+    public int speed;
     private CharacterController characontrol;
+    bool speedlock;
     void Start()
     {
+        speedlock = false;
         characontrol = GetComponent<CharacterController>();
     }
     void Update()
     {
-        Vector3 Dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        float magnitude = Mathf.Clamp01(Dir.magnitude) * speed;
+        Vector3 Dir = new Vector3(Input.GetAxisRaw("Horizontal")* Time.deltaTime * turnspeed, 0, Input.GetAxisRaw("Vertical") * Time.deltaTime * turnspeed);
         Dir.Normalize();
-
+        float magnitude = Mathf.Clamp01(Dir.magnitude) * speed;
         characontrol.SimpleMove(Dir * magnitude);
+
+        if(Dir != Vector3.zero)
+        {
+            transform.forward = Dir;
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (speedlock)
+            {
+                print("creuse");
+                StartCoroutine(cameraduration());
+                speedlock = false;
+            }
+        }
     }
     private void OnTriggerStay(Collider other)
     {
         print("coffre dispo");
-        if (other.gameObject.CompareTag("Chest") && Input.GetKeyDown(KeyCode.A))
+        if (other.gameObject.CompareTag("Chest"))
         {
-            print("creuse");
-            speed = 0;
-            StartCoroutine(cameraduration());
+            speedlock = true;
         }
     }
     IEnumerator cameraduration()
     {
+        speed = 0;
         yield return new WaitForSeconds(2);
-        speed = 20;
+        speed = 15;
     }
 }

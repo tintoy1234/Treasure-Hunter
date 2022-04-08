@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class pausescript : MonoBehaviour
 {
-    public GameObject pause; 
+    public GameObject pauseUI;
+    bool Pausemenu;
     // Start is called before the first frame update
     void Start()
     {
-        pause.SetActive(false);
+        pauseUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -16,11 +17,27 @@ public class pausescript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            pause.SetActive(true);
+            if (Pausemenu)
+            {
+                Resume();
+            }
+            else
+            {
+                pause();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            pause.SetActive(false);
-        }
+    }
+    public void Resume()
+    {
+        pauseUI.SetActive(false);
+        Time.timeScale = 1f;
+        Pausemenu = false;
+    }
+    void pause()
+
+    {
+        pauseUI.SetActive(true);
+        Time.timeScale = 0f;
+        Pausemenu = true;
     }
 }
